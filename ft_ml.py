@@ -1,4 +1,3 @@
-# Ziteng #
 import sys 
 import numpy as np
 import torch
@@ -11,7 +10,7 @@ import scipy.sparse
 from sklearn.metrics import f1_score, precision_score, recall_score
 from tqdm import tqdm
 import matplotlib.pyplot as plt
-sys.path.append("/home/jiarui.fan/biomedicine/Systematic-Evaluation-of-Single-Cell-Foundation-Models/scFoundation_model/model/")
+sys.path.append("../model/")
 from load import *
 
 import pandas as pd
@@ -116,7 +115,7 @@ def evaluate(model, data_loader, device):
     return accuracy, precision, recall, f1
 
 
-def train(model, train_loader, val_loader, test_loader,y_train, global_label_encoder, epochs=7, lr=0.0001, patience=10, accumulation_steps=4, log_file='/home/jiarui.fan/biomedicine/Systematic-Evaluation-of-Single-Cell-Foundation-Models/result/MS_mixed_0.txt'):
+def train(model, train_loader, val_loader, test_loader,y_train, global_label_encoder, epochs=7, lr=0.0001, patience=10, accumulation_steps=4, log_file='out_0.txt'):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model = model.to(device)
     # criterion = nn.CrossEntropyLoss()
@@ -205,7 +204,7 @@ def train(model, train_loader, val_loader, test_loader,y_train, global_label_enc
             f.write(log_message)
 
 
-        torch.save(model.state_dict(), f'/home/jiarui.fan/biomedicine/Systematic-Evaluation-of-Single-Cell-Foundation-Models/result/model_epoch_{epoch+1}.pth')
+        torch.save(model.state_dict(), f'/result/model_epoch_{epoch+1}.pth')
 
         # Early stopping based on validation accuracy
         if val_accuracy > best_val_accuracy:
@@ -214,7 +213,7 @@ def train(model, train_loader, val_loader, test_loader,y_train, global_label_enc
             best_test_metrics = (test_accuracy, test_precision, test_recall, test_f1)
             epochs_no_improve = 0
             # Save the best model's state dictionary
-            torch.save(model.state_dict(), f'/home/jiarui.fan/biomedicine/Systematic-Evaluation-of-Single-Cell-Foundation-Models/result/best_model.pth')
+            torch.save(model.state_dict(), f'/result/best_model.pth')
         else:
             epochs_no_improve += 1
             if epochs_no_improve == patience:
@@ -255,7 +254,7 @@ def prepare_data(expression_csv, adata, label_encoder=None):
 
 def main():
    # Load test dataset
-   test_adata = sc.read_h5ad('/home/jiarui.fan/biomedicine/hPancreas_test.h5ad')
+   test_adata = sc.read_h5ad('/hPancreas_test.h5ad')
    
    # Store all experiment results
    all_results = {
@@ -268,8 +267,8 @@ def main():
        print(f"\nProcessing seed {seed}")
        
        # Load train and validation data for current seed
-       train_adata = sc.read_h5ad(f'/home/jiarui.fan/biomedicine/hPancreas_train_seed_{seed}.h5ad')
-       val_adata = sc.read_h5ad(f'/home/jiarui.fan/biomedicine/hPancreas_val_seed_{seed}.h5ad')
+       train_adata = sc.read_h5ad(f'/hPancreas_train_seed_{seed}.h5ad')
+       val_adata = sc.read_h5ad(f'/hPancreas_val_seed_{seed}.h5ad')
        
        # Combine all cell types for consistent encoding
        all_cell_types = pd.concat([
@@ -281,9 +280,9 @@ def main():
        global_label_encoder.fit(all_cell_types)
        
        # Prepare data loaders
-       test_dataset, _ = prepare_data('/home/jiarui.fan/biomedicine/hPancreas_test.csv', test_adata, global_label_encoder)
-       train_dataset, _ = prepare_data(f'/home/jiarui.fan/biomedicine/hPancreas_train_seed_{seed}.csv', train_adata, global_label_encoder)
-       val_dataset, _ = prepare_data(f'/home/jiarui.fan/biomedicine/hPancreas_val_seed_{seed}.csv', val_adata, global_label_encoder)
+       test_dataset, _ = prepare_data('/hPancreas_test.csv', test_adata, global_label_encoder)
+       train_dataset, _ = prepare_data(f'/hPancreas_train_seed_{seed}.csv', train_adata, global_label_encoder)
+       val_dataset, _ = prepare_data(f'/hPancreas_val_seed_{seed}.csv', val_adata, global_label_encoder)
        
        # Create data loaders with batch processing settings
        train_loader = DataLoader(train_dataset, batch_size=16, shuffle=True, num_workers=1, pin_memory=True, drop_last=True)
@@ -293,7 +292,7 @@ def main():
        # Initialize and train model
        n_classes = len(global_label_encoder.classes_)
        print("n_claaes = ", n_classes)
-       model = LinearProbingClassifier(ckpt_path='/home/jiarui.fan/biomedicine/Systematic-Evaluation-of-Single-Cell-Foundation-Models/data/models.ckpt', n_classes=n_classes)
+       model = LinearProbingClassifier(ckpt_path='../models.ckpt', n_classes=n_classes)
        model.build()
        model = model.cuda()
        
@@ -301,7 +300,7 @@ def main():
        y_train = train_dataset.tensors[1].numpy()
        val_metrics, test_metrics = train(
            model, train_loader, val_loader, test_loader, y_train, global_label_encoder,
-           log_file=f'/home/jiarui.fan/biomedicine/Systematic-Evaluation-of-Single-Cell-Foundation-Models/result/ft_ml_results_seed_{seed}.txt'
+           log_file=f'/ft_ml_results_seed_{seed}.txt'
        )
        
        # Store results
@@ -325,7 +324,7 @@ def main():
    test_std = np.std(test_results, axis=0)
    
    # Save final statistics to file
-   with open('/home/jiarui.fan/biomedicine/Systematic-Evaluation-of-Single-Cell-Foundation-Models/result/MY_256F2_final_statistics.txt', 'w') as f:
+   with open('/final_statistics.txt', 'w') as f:
        f.write("Individual experiment results:\n\n")
        for seed in range(5):
            f.write(f"Seed {seed}:\n")
