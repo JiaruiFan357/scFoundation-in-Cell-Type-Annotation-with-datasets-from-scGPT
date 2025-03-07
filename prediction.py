@@ -194,7 +194,7 @@ def main():
         train_unique - 0.2, 
         train_counts, 
         width=0.4, 
-        label='C_data', 
+        label='Train_data', 
         color='skyblue', 
         align='center'
     )
@@ -202,7 +202,7 @@ def main():
         test_unique + 0.2, 
         test_counts, 
         width=0.4, 
-        label='F_data', 
+        label='Test_data', 
         color='salmon', 
         align='center'
     )
@@ -210,7 +210,7 @@ def main():
     # Set labels and title for the left subplot
     ax1.set_xlabel('Unique Labels')
     ax1.set_ylabel('Count')
-    ax1.set_title('Distribution of C_data and F_data')
+    ax1.set_title('Distribution of Train_data and Test_data')
     ax1.set_xticks(np.union1d(train_unique, test_unique))
     ax1.legend()
 
@@ -252,14 +252,14 @@ def main():
     plt.figure(figsize=(12, 6))
     bar_width = 0.25
 
-    plt.bar(train_unique - bar_width, train_counts, width=bar_width, label='C_data', color='skyblue', align='center')
-    plt.bar(test_unique, test_counts, width=bar_width, label='F_data', color='salmon', align='center')
+    plt.bar(train_unique - bar_width, train_counts, width=bar_width, label='Train_data', color='skyblue', align='center')
+    plt.bar(test_unique, test_counts, width=bar_width, label='Test_data', color='salmon', align='center')
     plt.bar(pre_unique + bar_width, pre_counts, width=bar_width, label='Prediction', color='lightgreen', align='center')
 
     # Adding labels and title
     plt.xlabel('Unique Labels')
     plt.ylabel('Count')
-    plt.title('Distribution of C_data, F_data, and Prediction')
+    plt.title('Distribution of Train_data, Test_data, and Prediction')
     plt.xticks(np.unique(np.concatenate((train_unique, test_unique, pre_unique))))
     plt.legend()
 
@@ -286,7 +286,7 @@ def main():
         train_unique - bar_width,
         train_counts,
         width=bar_width,
-        label='C_data',
+        label='Train_data',
         color='skyblue',
         align='center'
     )
@@ -294,7 +294,7 @@ def main():
         test_unique,
         test_counts,
         width=bar_width,
-        label='F_data',
+        label='Test_data',
         color='salmon',
         align='center'
     )
@@ -310,7 +310,7 @@ def main():
     # Configure main plot labels and title
     ax1.set_xlabel('Unique Labels')
     ax1.set_ylabel('Count')
-    ax1.set_title('Distribution of C_data, F_data, and Prediction')
+    ax1.set_title('Distribution of Train_data, Test_data, and Prediction')
     ax1.set_xticks(np.unique(np.concatenate((train_unique, test_unique, pre_unique))))
     ax1.legend()
 
@@ -376,7 +376,7 @@ def main():
         
         return results
 
-    names = ['C_data', 'F_data', 'Prediction']
+    names = ['Train_data', 'Test_data', 'Prediction']
     results = compare_distributions(y_train, y_test, all_preds, names)
     
     # Write results to file and print them
