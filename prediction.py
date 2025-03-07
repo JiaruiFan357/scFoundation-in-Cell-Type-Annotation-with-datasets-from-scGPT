@@ -15,7 +15,7 @@ import matplotlib.pyplot as plt
 from scipy import stats
 from scipy.spatial.distance import jensenshannon
 from scipy.stats import wasserstein_distance
-sys.path.append("/home/jiarui.fan/biomedicine/Systematic-Evaluation-of-Single-Cell-Foundation-Models/scFoundation_model/model/")
+sys.path.append("../model/")
 
 from load import *
 from sklearn.preprocessing import LabelEncoder
@@ -64,31 +64,6 @@ def prepare_data(expression_csv, adata, label_encoder):
     X_tensor = torch.FloatTensor(X)
     y_tensor = torch.LongTensor(y)
     return TensorDataset(X_tensor, y_tensor)
-
-# def prepare_data(expression_csv, adata, label_encoder=None):
-#     # Read the CSV file into a DataFrame (expression data only)
-#     df = pd.read_csv(expression_csv, index_col=0)
-#     X = df.values
-#     print("Shape of CSV data:", X.shape)
-#     print("CSV index:", df.index)
-    
-#     # Use the 'Celltype' column from adata.obs as labels.
-#     # (This requires that adata.obs has a 'Celltype' column for every dataset.)
-#     if 'Celltype' not in adata.obs.columns:
-#         raise KeyError("Expected 'Celltype' column in adata.obs")
-#     labels = adata.obs['Celltype']
-#     print("Number of labels from AnnData:", len(labels))
-    
-#     if label_encoder is None:
-#         label_encoder = LabelEncoder()
-#         y = label_encoder.fit_transform(labels)
-#     else:
-#         y = label_encoder.transform(labels)
-    
-#     X_tensor = torch.FloatTensor(X)
-#     y_tensor = torch.LongTensor(y)
-    
-#     return TensorDataset(X_tensor, y_tensor), label_encoder
 
 
 class LinearProbingClassifier(nn.Module):
@@ -156,9 +131,9 @@ class LinearProbingClassifier(nn.Module):
 
 
 def main():
-    train_adata = sc.read_h5ad('/home/jiarui.fan/biomedicine/hPancreas_train_seed_0.h5ad')
-    val_adata = sc.read_h5ad('/home/jiarui.fan/biomedicine/hPancreas_val_seed_0.h5ad')
-    test_adata =sc.read_h5ad('/home/jiarui.fan/biomedicine/hPancreas_test.h5ad')
+    train_adata = sc.read_h5ad('/hPancreas_train_seed_0.h5ad')
+    val_adata = sc.read_h5ad('/hPancreas_val_seed_0.h5ad')
+    test_adata =sc.read_h5ad('/hPancreas_test.h5ad')
      
 
     # Before using prepare_data, load or define global_label_encoder
@@ -171,9 +146,9 @@ def main():
     global_label_encoder.fit(all_cell_types)
 
     # Prepare datasets
-    test_dataset = prepare_data('/home/jiarui.fan/biomedicine/hPancreas_test.csv', test_adata, global_label_encoder)
-    train_dataset = prepare_data(f'/home/jiarui.fan/biomedicine/hPancreas_train_seed_0.csv', train_adata, global_label_encoder)
-    val_dataset = prepare_data(f'/home/jiarui.fan/biomedicine/hPancreas_val_seed_0.csv', val_adata, global_label_encoder)
+    test_dataset = prepare_data('/hPancreas_test.csv', test_adata, global_label_encoder)
+    train_dataset = prepare_data(f'/hPancreas_train_seed_0.csv', train_adata, global_label_encoder)
+    val_dataset = prepare_data(f'/hPancreas_val_seed_0.csv', val_adata, global_label_encoder)
       
     # Create data loaders
     train_loader = DataLoader(train_dataset, batch_size=16, shuffle=True, num_workers=1, pin_memory=True, drop_last=True)
@@ -181,16 +156,16 @@ def main():
     test_loader = DataLoader(test_dataset, batch_size=16, shuffle=False, num_workers=1, pin_memory=True, drop_last=False)
 
 
-    best_model_path = '/home/jiarui.fan/biomedicine/Systematic-Evaluation-of-Single-Cell-Foundation-Models/result/model_epoch_7.pth'
+    best_model_path = '/model_epoch_7.pth'
     n_classes = len(global_label_encoder.classes_)
     best_model = LinearProbingClassifier(
-        ckpt_path='/home/jiarui.fan/biomedicine/Systematic-Evaluation-of-Single-Cell-Foundation-Models/data/models.ckpt',
+        ckpt_path='../models.ckpt',
         n_classes=n_classes
     )
     best_model.build()
     # Proper checkpoint loading (handle missing/unexpected keys)
     checkpoint = torch.load(best_model_path, weights_only=True)
-    best_model.load_state_dict(checkpoint, strict=False)  # strict=False allows you to handle mismatches gracefully
+    best_model.load_state_dict(checkpoint, strict=False)  
     best_model = best_model.cuda()
 
     test_accuracy, test_f1, all_targets, all_preds = evaluate(best_model, test_loader, torch.device("cuda"))
@@ -264,8 +239,6 @@ def main():
     plt.tight_layout()
     plt.savefig('Distribution1.png')
     plt.show()
-
-
 
 
 
@@ -372,16 +345,6 @@ def main():
 
 
     def compare_distributions(dist1, dist2, dist3, names):
-        """
-        Compare three distributions using different metrics
-        
-        Args:
-            dist1, dist2, dist3: Input distributions to compare
-            names: Names of the distributions
-        
-        Returns:
-            Dictionary containing comparison matrices for different metrics
-        """
         distributions = [dist1, dist2, dist3]
         n = len(names)
         
