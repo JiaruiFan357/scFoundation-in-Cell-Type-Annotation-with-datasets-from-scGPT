@@ -1,0 +1,29 @@
+Training started
+Epoch 1/7:
+Train Loss: 0.8620, Train Accuracy: 80.89%
+Val Accuracy: 95.83%, Val F1 Score: 0.8246, Val Precision: 0.8476, Val Recall: 0.8163
+Test Accuracy: 95.91%, Test F1 Score: 0.6224, Test Precision: 0.6125, Test Recall: 0.6467
+Epoch 2/7:
+Train Loss: 0.2116, Train Accuracy: 96.83%
+Val Accuracy: 97.54%, Val F1 Score: 0.8569, Val Precision: 0.8710, Val Recall: 0.8514
+Test Accuracy: 98.00%, Test F1 Score: 0.6656, Test Precision: 0.7071, Test Recall: 0.6851
+Epoch 3/7:
+Train Loss: 0.1329, Train Accuracy: 97.33%
+Val Accuracy: 95.55%, Val F1 Score: 0.9149, Val Precision: 0.9414, Val Recall: 0.9010
+Test Accuracy: 93.30%, Test F1 Score: 0.6710, Test Precision: 0.7101, Test Recall: 0.6797
+Epoch 4/7:
+Train Loss: 0.0973, Train Accuracy: 97.75%
+Val Accuracy: 95.93%, Val F1 Score: 0.8506, Val Precision: 0.8711, Val Recall: 0.8405
+Test Accuracy: 95.96%, Test F1 Score: 0.6658, Test Precision: 0.6808, Test Recall: 0.6758
+Epoch 5/7:
+Train Loss: 0.0776, Train Accuracy: 98.01%
+Val Accuracy: 96.21%, Val F1 Score: 0.8874, Val Precision: 0.8869, Val Recall: 0.9270
+Test Accuracy: 96.15%, Test F1 Score: 0.6525, Test Precision: 0.6420, Test Recall: 0.6837
+Epoch 6/7:
+Train Loss: 0.0702, Train Accuracy: 97.99%
+Val Accuracy: 97.25%, Val F1 Score: 0.9377, Val Precision: 0.9544, Val Recall: 0.9327
+Test Accuracy: 95.60%, Test F1 Score: 0.6522, Test Precision: 0.6723, Test Recall: 0.6632
+Epoch 7/7:
+Train Loss: 0.0621, Train Accuracy: 98.19%
+Val Accuracy: 97.54%, Val F1 Score: 0.9411, Val Precision: 0.9699, Val Recall: 0.9222
+Test Accuracy: 93.75%, Test F1 Score: 0.6787, Test Precision: 0.7073, Test Recall: 0.6818

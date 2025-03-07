@@ -1,0 +1,42 @@
+==========================================
+SLURM_JOB_ID = 1325
+SLURM_NODELIST = pascal-node01.l3s.intra
+==========================================
+{'mask_gene_name': False, 'gene_num': 19266, 'seq_len': 19266, 'encoder': {'hidden_dim': 768, 'depth': 12, 'heads': 12, 'dim_head': 64, 'seq_len': 19266, 'module_type': 'transformer', 'norm_first': False}, 'decoder': {'hidden_dim': 512, 'depth': 6, 'heads': 8, 'dim_head': 64, 'module_type': 'performer', 'seq_len': 19266, 'norm_first': False}, 'n_class': 104, 'pad_token_id': 103, 'mask_token_id': 102, 'bin_num': 100, 'bin_alpha': 1.0, 'rawcount': True, 'model': 'mae_autobin', 'test_valid_train_idx_dict': '/nfs_beijing/minsheng/data/os10000w-new/global_shuffle/meta.csv.train_set_idx_dict.pt', 'valid_data_path': '/nfs_beijing/minsheng/data/valid_count_10w.npz', 'num_tokens': 13, 'train_data_path': None, 'isPanA': False, 'isPlanA1': False, 'max_files_to_load': 5, 'bin_type': 'auto_bin', 'value_mask_prob': 0.3, 'zero_mask_prob': 0.03, 'replace_prob': 0.8, 'random_token_prob': 0.1, 'mask_ignore_token_ids': [0], 'decoder_add_zero': True, 'mae_encoder_max_seq_len': 15000, 'isPlanA': False, 'mask_prob': 0.3, 'model_type': 'mae_autobin', 'pos_embed': False, 'device': 'cuda'}
+self.pos_emb and self.token_emb also frozen
+self.encoder.transformer_encoder self_attn.in_proj_weight have grad
+self.encoder.transformer_encoder self_attn.in_proj_bias have grad
+self.encoder.transformer_encoder self_attn.out_proj.weight have grad
+self.encoder.transformer_encoder self_attn.out_proj.bias have grad
+self.encoder.transformer_encoder linear1.weight have grad
+self.encoder.transformer_encoder linear1.bias have grad
+self.encoder.transformer_encoder linear2.weight have grad
+self.encoder.transformer_encoder linear2.bias have grad
+self.encoder.transformer_encoder norm1.weight have grad
+self.encoder.transformer_encoder norm1.bias have grad
+self.encoder.transformer_encoder norm2.weight have grad
+self.encoder.transformer_encoder norm2.bias have grad
+Best Model - Test Accuracy: 93.62%, Test F1 Score: 0.6781
+KS Test:
+                  C_data    F_data  Prediction
+C_data      0.000000e+00  0.123300    0.115950
+F_data      3.420947e-39  0.000000    0.046942
+Prediction  1.061895e-34  0.000183    0.000000
+
+
+Jensen-Shannon:
+              C_data    F_data  Prediction
+C_data      0.000000  0.806262    0.732049
+F_data      0.806262  0.000000    0.829600
+Prediction  0.732049  0.829600    0.000000
+
+
+Wasserstein:
+              C_data    F_data  Prediction
+C_data      0.000000  0.401173    0.398191
+F_data      0.401173  0.000000    0.150782
+Prediction  0.398191  0.150782    0.000000
+
+
+test_adata shape: 4218
+Number of predictions: 4218

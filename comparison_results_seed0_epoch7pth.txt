@@ -1,0 +1,18 @@
+KS Test:
+                  C_data    F_data  Prediction
+C_data      0.000000e+00  0.123300    0.115950
+F_data      3.420947e-39  0.000000    0.046942
+Prediction  1.061895e-34  0.000183    0.000000
+
+Jensen-Shannon:
+              C_data    F_data  Prediction
+C_data      0.000000  0.806262    0.732049
+F_data      0.806262  0.000000    0.829600
+Prediction  0.732049  0.829600    0.000000
+
+Wasserstein:
+              C_data    F_data  Prediction
+C_data      0.000000  0.401173    0.398191
+F_data      0.401173  0.000000    0.150782
+Prediction  0.398191  0.150782    0.000000
+
