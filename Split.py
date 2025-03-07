@@ -1,4 +1,3 @@
-# Ziteng #
 import pandas as pd
 import numpy as np
 import scanpy as sc
@@ -170,20 +169,20 @@ def process_all_files(input_prefix, output_prefix, tsv_file, seeds=None):
 
 def main():
     # Initial setup: If you use Covid-19 dataset
-    tsv_file = '/home/jiarui.fan/biomedicine/Systematic-Evaluation-of-Single-Cell-Foundation-Models/data/OS_scRNA_gene_index.19264.tsv'
+    tsv_file = '/OS_scRNA_gene_index.19264.tsv'
     output_prefix = 'hPancreas'
     seeds = range(5)
     
     # Process training data
     print("Processing training data...")
-    train_data = '/home/jiarui.fan/biomedicine/Systematic-Evaluation-of-Single-Cell-Foundation-Models/data/demo_train.h5ad'
+    train_data = '/demo_train.h5ad'
     adata_train = sc.read_h5ad(train_data)
     convert_and_split_adata(adata_train, output_prefix, seeds=seeds, train_size=0.9)
     process_all_files(output_prefix, output_prefix, tsv_file, seeds=seeds)
     
     # Process test data
     print("\nProcessing test data...")
-    test_data = '/home/jiarui.fan/biomedicine/Systematic-Evaluation-of-Single-Cell-Foundation-Models/data/demo_test.h5ad'
+    test_data = '/demo_test.h5ad'
     adata_test = sc.read_h5ad(test_data)
     convert_and_split_adata(adata_test, output_prefix, seeds=None)
     process_all_files(output_prefix, output_prefix, tsv_file, seeds=None)
